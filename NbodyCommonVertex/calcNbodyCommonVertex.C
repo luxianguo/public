@@ -134,8 +134,11 @@ void calcNbodyCommonVertex()
   LRay rs[]={r0, r1, r2};
   const int nray = sizeof(rs)/sizeof(LRay);
 
-  const double dca2 = GetDCA2(nray, rs);
+  TVector3 commv;
+  const double dca2 = GetDCA2(nray, rs, &commv);
   cout<<"DCA2: "<<dca2<<endl<<endl;
+  commv.Print();
+
 }
 
 int main(int argc, char* argv[])
