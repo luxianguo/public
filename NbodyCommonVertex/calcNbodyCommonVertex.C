@@ -58,9 +58,9 @@ const double LRay::GetDCA2(const TVector3 xx)
 
 double GetDCA2(const int nray, LRay rs[], TVector3 *vertex=0x0)
 {
-  const int kprint = 1;
+  const int kdebug = 0;
 
-  if(kprint){
+  if(kdebug){
     cout<<"nray: "<<nray<<endl;
     for(int ii=0; ii<nray; ii++){
       cout<<"ray: "<<ii<<endl;
@@ -78,7 +78,7 @@ double GetDCA2(const int nray, LRay rs[], TVector3 *vertex=0x0)
   for(int ii=0; ii<nray; ii++){
     lhs -= rs[ii].GetMatrixA();
   }
-  if(kprint){
+  if(kdebug){
     cout<<"LHS: "<<endl;
     lhs.Print();
     cout<<endl;
@@ -88,7 +88,7 @@ double GetDCA2(const int nray, LRay rs[], TVector3 *vertex=0x0)
   for(int ii=0; ii<nray; ii++){
     rhs += rs[ii].GetMatrixB();
   }
-  if(kprint){
+  if(kdebug){
    cout<<"RHS: "<<endl;
    rhs.Print();
    cout<<endl;
@@ -97,7 +97,7 @@ double GetDCA2(const int nray, LRay rs[], TVector3 *vertex=0x0)
   TMatrixD xx(3,1);
   xx=lhs.Invert()*rhs;
   const TVector3 Xvec(xx[0][0],xx[1][0],xx[2][0]);
-  if(kprint){
+  if(kdebug){
     cout<<"X: "<<endl;
     Xvec.Print();
     cout<<endl;
@@ -111,11 +111,17 @@ double GetDCA2(const int nray, LRay rs[], TVector3 *vertex=0x0)
   for(int ii=0; ii<nray; ii++){
     dca2 += rs[ii].GetDCA2(Xvec);
   }
+
+  if(kdebug){
+    cout<<"DCA2 = "<<dca2<<endl;
+  }
+
   return dca2;
 }
 
 void calcNbodyCommonVertex()
 {
+  const int kprint = 1;
   //-->
   //this will give vertex (x,y,z)=(0.500000,0.500000,0.500000), DCA2: 1.5
   const TVector3 a0(0,1,0);
@@ -136,8 +142,18 @@ void calcNbodyCommonVertex()
 
   TVector3 commv;
   const double dca2 = GetDCA2(nray, rs, &commv);
-  cout<<"DCA2: "<<dca2<<endl<<endl;
-  commv.Print();
+
+  if(kprint){
+    cout<<"nray: "<<nray<<endl;
+    for(int ii=0; ii<nray; ii++){
+      cout<<"ray: "<<ii<<endl;
+      rs[ii].Print();
+      cout<<endl;
+    }
+
+    cout<<"DCA2: "<<dca2<<endl<<"Common Vertex: ";
+    commv.Print();
+  }
 
 }
 
